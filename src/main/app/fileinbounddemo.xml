@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xmlns:mulerequester="http://www.mulesoft.org/schema/mule/mulerequester"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/mulerequester http://www.mulesoft.org/schema/mule/mulerequester/1.0-SNAPSHOT/mule-mulerequester.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+     <mulerequester:config name="Mule_Requester" doc:name="Mule Requester"/>   
+    <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
+    <file:connector name="File" readFromDirectory="C:\Users\apoor\Desktop\FileTest" autoDelete="false" streaming="true" validateConnections="true" doc:name="File"/>
+    <flow name="fileinbounddemoFlow">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/file" doc:name="HTTP"/>
+        <mulerequester:request config-ref="mule-requester-config"
+   				 resource="file:///var/in/myfile.txt?connector=no-delete-file-connector" />
+        
+        <!-- <flow-ref name="fileinbounddemoFlow1" doc:name="fileinbounddemoFlow1"/> -->
+        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+    
+</mule>
